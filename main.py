@@ -1,11 +1,24 @@
 import tkinter as tk
-from tkinter import messagebox, scrolledtext
+from tkinter import messagebox, scrolledtext,ttk
 import platform
 import subprocess
 import os
 import shutil
 from fpdf import FPDF
 from datetime import datetime
+
+# Instalacion de dependecias del script
+try:
+    import tkinter as tk
+    from tkinter import messagebox, scrolledtext, ttk
+    import platform
+    import subprocess
+    import os
+    import shutil
+    from fpdf import FPDF
+    from datetime import datetime
+except Exception as e:
+    print(f"Error al instalar dependencias: {e}")
 
 # Función para detectar información básica del sistema
 def detectar_sistema():
@@ -84,7 +97,7 @@ def escanear_clamav():
         return "ClamAV no está instalado. Puede instalarlo con 'sudo apt install clamav' o desde https://www.clamav.net"
 
     try:
-        resultado = subprocess.run(["clamscan", "-r", "--bell", "/home"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        resultado = subprocess.run(["clamscan", "-r", "--bell", "/home/jesus/Imágenes"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return resultado.stdout.strip()[-2000:]
     except Exception as e:
         return f"Error al ejecutar ClamAV: {e}"
@@ -120,13 +133,17 @@ def exportar_pdf(contenido):
     pdf.output(nombre)
     messagebox.showinfo("PDF generado", f"Informe exportado como {nombre}")
 
-# Función principal para ejecutar análisis
 def analizar_sistema():
     salida_texto.delete(1.0, tk.END)
+
+    estado_label.config(text="🔍 Detectando información del sistema...")
+    ventana.update_idletasks()
     info, distro, version = detectar_sistema()
     contenido = f"[INFO DEL SISTEMA]\n{info}\n\n"
     salida_texto.insert(tk.END, contenido)
 
+    estado_label.config(text="📦 Comprobando actualizaciones disponibles...")
+    ventana.update_idletasks()
     salida_texto.insert(tk.END, "[ACTUALIZACIONES DISPONIBLES]\n")
     actualizaciones = comprobar_actualizaciones(distro)
     salida_texto.insert(tk.END, f"{actualizaciones}\n")
@@ -139,42 +156,57 @@ def analizar_sistema():
     salida_texto.insert(tk.END, recomendacion)
     contenido += recomendacion
 
+    estado_label.config(text="🔒 Comprobando firewall...")
+    ventana.update_idletasks()
     salida_texto.insert(tk.END, "[FIREWALL]\n")
     firewall = comprobar_firewall()
     salida_texto.insert(tk.END, f"{firewall}\n\n")
     contenido += f"[FIREWALL]\n{firewall}\n\n"
 
+    estado_label.config(text="🌐 Comprobando puertos abiertos...")
+    ventana.update_idletasks()
     salida_texto.insert(tk.END, "[PUERTOS ABIERTOS]\n")
     puertos = comprobar_puertos_abiertos()
     salida_texto.insert(tk.END, f"{puertos}\n\n")
     contenido += f"[PUERTOS ABIERTOS]\n{puertos}\n\n"
 
+    estado_label.config(text="🔎 Buscando vulnerabilidades conocidas...")
+    ventana.update_idletasks()
     salida_texto.insert(tk.END, "[VULNERABILIDADES CONOCIDAS]\n")
     vulnerabilidades = buscar_vulnerabilidades()
     salida_texto.insert(tk.END, f"{vulnerabilidades}\n\n")
     contenido += f"[VULNERABILIDADES CONOCIDAS]\n{vulnerabilidades}\n\n"
 
+    estado_label.config(text="📋 Ejecutando auditoría de seguridad (Lynis)...")
+    ventana.update_idletasks()
     salida_texto.insert(tk.END, "[AUDITORÍA DE SEGURIDAD - LYNIS]\n")
     lynis = ejecutar_lynis()
     salida_texto.insert(tk.END, f"{lynis}\n\n")
     contenido += f"[AUDITORÍA DE SEGURIDAD - LYNIS]\n{lynis}\n\n"
 
+    estado_label.config(text="🧪 Escaneando con ClamAV...")
+    ventana.update_idletasks()
     salida_texto.insert(tk.END, "[ESCANEO ANTIVIRUS - CLAMAV]\n")
     clamav = escanear_clamav()
     salida_texto.insert(tk.END, f"{clamav}\n")
     contenido += f"[ESCANEO ANTIVIRUS - CLAMAV]\n{clamav}\n"
 
-    exportar_pdf(contenido)
+    estado_label.config(text="✅ Análisis completado.")
+    ventana.update_idletasks()
 
 # --- Interfaz gráfica ---
 ventana = tk.Tk()
 ventana.title("Estimador de Seguridad - Sistema Linux")
-ventana.geometry("800x600")
+ventana.geometry("1000x600")
 
 boton_analizar = tk.Button(ventana, text="Analizar Sistema", command=analizar_sistema, font=('Arial', 12), bg='lightblue')
 boton_analizar.pack(pady=10)
 
 salida_texto = scrolledtext.ScrolledText(ventana, wrap=tk.WORD, font=('Courier', 10))
 salida_texto.pack(expand=True, fill='both', padx=10, pady=10)
+
+estado_label = tk.Label(ventana, text="", font=('Arial', 10), fg="green")
+estado_label.pack(pady=5)
+
 
 ventana.mainloop()

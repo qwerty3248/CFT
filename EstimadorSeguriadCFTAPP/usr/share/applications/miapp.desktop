@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=EstimadorSeguridad
+Exec=/opt/miapp/main
+Icon=/opt/miapp/icono.png
+Terminal=false
+Type=Application
+Categories=Utility;
