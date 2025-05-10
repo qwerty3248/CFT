@@ -1,0 +1,10 @@
+Package: miapp
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: python3, python3-tk
+Maintainer: Jesús Losada
+Description: Herramienta de auditoría de seguridad del sistema
+ Una app gráfica que escanea el sistema, busca vulnerabilidades
+ y genera informes de seguridad con ClamAV, Lynis y más.
