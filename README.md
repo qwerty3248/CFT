@@ -7,7 +7,7 @@ El **Estimador de Seguridad** es una aplicación que permite realizar estimacion
 
 ## Características
 
-- **Estimaciones precisas:** Realiza cálculos detallados sobre las posibles vulnerabilidades y riesgos de un sistema.
+- **Estimaciones precisas:** Realiza cálculos detallados sobre las posibles vulnerabilidades y riesgos de un sistema. (AVISO: el antivirus revisa la carpeta imagenes para que al app no tarde mucho, eso se puede quitar en al app)
 - **Interfaz gráfica:** Proporciona una interfaz amigable para que los usuarios puedan interactuar con la aplicación de manera sencilla.
 - **Generación de informes:** Permite exportar los resultados de las estimaciones a formatos de fácil lectura, como PDF o texto plano.
 - **Instalación fácil:** Puedes instalar la aplicación en tu sistema con solo unos pocos pasos.
